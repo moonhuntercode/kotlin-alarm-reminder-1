@@ -49,6 +49,7 @@ proguard/
 .cxx/
 
 # Google Services / Signing (por seguridad)
+keystore.properties
 # google-services.json
 # *.jks
 # *.keystore

@@ -5,9 +5,12 @@ Si distribuyes tu APK de manera independiente, necesitas construir tu propio sis
 ## Arquitectura de Actualización Independiente
 
 ### 1. El Servidor de Versiones (Remote Config)
+
 Necesitas hospedar un archivo pequeñísimo (ej. `version.json`) en un servidor gratuito como **GitHub Pages, Gist, Firebase Remote Config o AWS S3**.
+
 ```json
 {
+   cd "E:/aplicaciones/kotlin-apps/alarmReminder2/app/build/outputs/apk/debug/"
   "latest_version_code": 2,
   "latest_version_name": "1.1.0",
   "download_url": "https://tuservidor.com/app-release-v1.1.0.apk",
@@ -16,21 +19,27 @@ Necesitas hospedar un archivo pequeñísimo (ej. `version.json`) en un servidor 
 ```
 
 ### 2. Comprobador de Versión (ViewModel)
+
 Al abrir la App (en `MainActivity` o `LoginScreen`), haces una petición HTTP rápida (usando `Retrofit` o `Ktor`) para leer ese `version.json`.
 Si `remote_version_code` es mayor que tu `BuildConfig.VERSION_CODE`, se muestra un Modal de "Nueva Actualización Disponible".
 
 ### 3. Descarga en Segundo Plano (DownloadManager)
+
 Si el usuario acepta, usas el `DownloadManager` nativo de Android. Esto descargará el APK directamente en la carpeta de *Descargas* del teléfono con una notificación nativa de progreso.
 
 ### 4. Permisos Críticos (AndroidManifest.xml)
+
 Tu app necesitará obligatoriamente estos permisos para poder descargar e iniciar una instalación externa:
+
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 ```
 
 ### 5. Lanzar el Instalador del Sistema (Intent)
+
 Una vez el `DownloadManager` finaliza, se dispara un `BroadcastReceiver` que lanza la pantalla de instalación nativa de Android mediante un FileProvider:
+
 ```kotlin
 val intent = Intent(Intent.ACTION_VIEW).apply {
     setDataAndType(apkUri, "application/vnd.android.package-archive")
@@ -39,6 +48,7 @@ val intent = Intent(Intent.ACTION_VIEW).apply {
 }
 context.startActivity(intent)
 ```
+
 *(Nota: El teléfono de tu usuario o familiar le pedirá permiso para "Instalar aplicaciones desconocidas de esta fuente" la primera vez).*
 
 ---

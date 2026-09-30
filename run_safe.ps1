@@ -32,7 +32,7 @@ Run-Step "Ktlint (Verificación de Estilo)" ".\gradlew ktlintCheck"
 
 Run-Step "Pruebas Unitarias (Tests)" ".\gradlew testDebugUnitTest"
 
-Run-Step "Compilación y Ensamblaje (Build APK)" ".\gradlew assembleDebug"
+Run-Step "Compilación y Ensamblaje (Build APK)" ".\gradlew assembleRelease"
 
 Write-Host ""
 Write-Host "🎉 PROYECTO VALIDADO CORRECTAMENTE 🎉" -ForegroundColor Green
